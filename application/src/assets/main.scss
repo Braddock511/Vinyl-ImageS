@@ -1,0 +1,40 @@
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+  margin: 0;
+  font-family: "Heebo", sans-serif;
+  color: white;
+}
+
+body{
+  background-color: #1c1e30;
+  overflow-x: hidden;
+}
+
+a{
+  text-decoration: none;
+  
+  &:visited{
+    text-decoration: none;
+  }
+}
+
+ul{
+  list-style-type: none;
+}
+
+input, textarea{
+  background-color: #2f3131;
+  border: 1px solid black;
+  
+  &:focus{
+    outline: none;
+  }
+  
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
