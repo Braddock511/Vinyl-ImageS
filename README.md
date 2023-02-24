@@ -5,12 +5,14 @@ All data is taken from the discogs website: discogs.com
 
 # Configuration
   
-  The requirements.txt file should list all libraries and tools that your need
-  
+  1. Download and configure all required libraries and tools listed in requirements
+  2. Enable the postgresql service and in database.py -> SQLALCHEMY_DATABASE_URL = "postgresql://{user}:{password}@{host}:{port}/{database}"
+  3. In database.py -> fill in the blanks in data_to_insert
+  4. To enable the interface, in the application folder, type "npm run dev" in the console, the application will run on localhost
 
 # Used tools
 
-- Model OCR from azure api
+- Model OCR from Azure API
 - ImageKit API
 - Discogs API 
 - Selenium scraper
