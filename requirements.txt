@@ -1,0 +1,22 @@
+Libraries:
+    azure_storage==0.37.0
+    imagekitio==3.0.1
+    model==0.6.0
+    msrest==0.7.1
+    requests==2.26.0
+    selenium==4.8.2
+    webdriver_manager==3.7.0
+    api==0.0.7
+    fastapi==0.92.0
+    model==0.6.0
+    SQLAlchemy==2.0.4
+    vite==4.1.3
+    axios==1.3.3
+    sass==1.58.3
+    vue-easy-lightbox==1.13.0
+    vue-router==4.1.6
+    vue==3.2.47
+    vitejs/plugin-vue==4.0.0
+
+Tools:
+    postgres (PostgreSQL) 14.2
