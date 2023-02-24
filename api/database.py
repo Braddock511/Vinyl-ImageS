@@ -16,7 +16,7 @@ def get_credentials():
     class Credentials(Base):
         __tablename__ = "credentials"
 
-        id = Column(Integer, primary_key=True, index=True)
+        id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
         api_imagekit_id = Column(String)
         api_imagekit_secret = Column(String)
@@ -32,6 +32,11 @@ def get_credentials():
     # create the table if it does not exist
     Base.metadata.create_all(engine)
 
+    # fill in the blanks in data_to_insert
+    # data_to_insert = {"api_imagekit_id":"", "api_imagekit_secret": "", "api_imagekit_endpoint": "", "api_azure_subscription_key": "", "api_azure_endpoint":"", "api_discogs_id": "", "api_discogs_secret": "", "api_discogs_token": ""}
+    # data_image_instance = Credentials(**data_to_insert)
+    # session.add(data_image_instance)
+
     rows = session.query(Credentials).all()
     credentials = []
 
@@ -46,6 +51,7 @@ def get_credentials():
         credentials.append(row.api_discogs_id)
         credentials.append(row.api_discogs_secret)
         credentials.append(row.api_discogs_token)
+        break
 
     session.close()
     
