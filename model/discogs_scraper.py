@@ -3,11 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from statistics import median
-from re import sub, findall
-from pandas import DataFrame
-from numpy import array
 from re import sub, findall
 
 class Scraper:
@@ -26,9 +25,9 @@ class Scraper:
 
         self.driver.get(path_website)
 
-        sleep(2)
         try:
-            self.driver.find_element(By.ID, cookie).click()
+            wait = WebDriverWait(self.driver, 2.5)
+            wait.until(EC.presence_of_element_located((By.ID, cookie))).click()
         except:
             self.driver.find_element(By.CLASS_NAME, cookie).click()
 
@@ -44,11 +43,10 @@ class Scraper:
         'VG+':'Very Good Plus (VG+)', 'VG++':'Very Good Plus (VG+)', 'BARDZO DOBRY':'Very   Good Plus (VG+)', 'BARDZO DOBRY.':'Very Good Plus (VG+)',  'BARDZO DOBRY.PŁYTA DO UMYCIA':'Very Good Plus (VG+)', 'BARDZO DOBRY.DROBNE RYSKI':'Very Good Plus (VG+)', 'BARDZO DOBRY.DO UMYCIA':'Very Good Plus (VG+)',
         'G':'Good (G)', 'GOOD': 'Good (G)', 'GOOD+': 'Good (G)', }
 
-        self.to_polish = {'M': 'Nowy', '-M':'Prawie idealny', 'VG+':'Bardzo dobry', "VG":'Calkiem dobry', 'G':'Dobry'}
-
-    def find(self, barcode: str, index: int):
+    def find(self, barcode: str, index: int) -> bool:
         self.barcode = barcode
 
+        # try to find the album thumbnail by searching the barcode
         try:
             self.driver.find_element(By.ID, 'search_q').send_keys(barcode)
             self.driver.find_element(By.ID, 'do_site_search').click()
@@ -60,7 +58,10 @@ class Scraper:
                 self.driver.find_elements(By.CLASS_NAME, 'thumbnail_center')[index].click()
             
             except NoSuchElementException:
-                return False
+                try:
+                    self.driver.find_element(By.ID, 'header_logo').click()
+                except NoSuchElementException:
+                    self.driver.find_element(By.ID, 'discogs-logo').click()
 
             except ElementClickInterceptedException:
                 self.driver.execute_script("window.scrollBy(0, 800);")
@@ -78,7 +79,7 @@ class Scraper:
 
         return True         
             
-    def get_price(self, m_condition: str):
+    def get_price(self, m_condition: str) -> float:
         try:
             prices = self.driver.find_element(By.CLASS_NAME, "forsale_QoVFl")
             prices.find_element(By.CLASS_NAME, 'link_1ctor').click()
@@ -98,8 +99,7 @@ class Scraper:
         m_condition = self.conditions.get(m_condition)
 
         try:
-            filter_condition = self.driver.find_element(By.CLASS_NAME, "filter_condition ")
-            filter_condition.find_element(By.XPATH, f"//span[text()='{m_condition}']").click()
+            self.driver.find_element(By.CLASS_NAME, "filter_condition ").find_element(By.XPATH, f"//span[text()='{m_condition}']").click()
         except (NoSuchElementException, ElementClickInterceptedException):
             pass
 
@@ -111,6 +111,7 @@ class Scraper:
             element = element.text
             try:
                 if f'Media Condition: {m_condition}' in element:
+                    #checking different currencies
                     item_euro = findall(r'€.*', element)[0]
                     item = sub('€', '', item_euro)
 
@@ -134,8 +135,9 @@ class Scraper:
                             item = sub('CHF', '', item_swiss_pound)
                         except IndexError:
                             pass
-
+                        
                     if not 'total' in item:
+                        # Convert the price to PLN
                         self.price = float(item) * 4.6
                         list_of_prices.append(self.price)
                         self.exists_flag = True
@@ -143,8 +145,8 @@ class Scraper:
                 pass     
                 
         if self.exists_flag:
-            self.price = median(list_of_prices)       
-            self.price = round(self.price, -1)-0.01
+            # Calculate the median price from the list of prices
+            self.price = round(median(list_of_prices), -1) - 0.01
             if self.price <= 0:
                 self.price = 9.99
 

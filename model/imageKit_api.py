@@ -1,5 +1,4 @@
 from imagekitio import ImageKit
-from base64 import b64encode
 
 def upload_file_imageKit(image, credentials: list):
     imageKit_public_key = credentials[0]

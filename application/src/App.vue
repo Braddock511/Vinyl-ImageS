@@ -1,16 +1,10 @@
 <template>
-    <TheHeader />
-    <TheUpload />
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
-<script>
-  import TheUpload from '@/components/TheUpload.vue'
-  import TheHeader from '@/components/TheHeader.vue'
 
-  export default {
-    components:{
-      TheHeader,
-      TheUpload
-    }
-  }
+<script>
+
 </script>
