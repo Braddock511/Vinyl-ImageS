@@ -13,18 +13,6 @@
             <form id="upload" @submit.prevent="getDataImage">
                 <h1>Upload Image</h1>
                 <input type="file" @change="handleFileInput" required>
-                <b>Display the median price of vinyl?</b> <br>
-                (Upload will take a while longer)
-                <div id="price">
-                    <input type="checkbox" v-model="withPrice">
-                    <select v-model="condition" v-if="withPrice">
-                        <option value="M-">M- (Almost Perfect)</option>
-                        <option value="M">M (New)</option>
-                        <option value="VG+">VG+ (Excellent)</option>
-                        <option value="VG">VG (Very Good)</option>
-                        <option value="G">G (Good)</option>
-                    </select>
-                </div>
                 <button type="submit">Upload</button>
             </form>
 
@@ -55,8 +43,6 @@
                     imageData: null,
                     visible: false,
                     img: null,
-                    withPrice: false,
-                    condition: "M-",
                     loading: false
                 }
             },
@@ -76,7 +62,7 @@
                 this.loading = true;
                 try 
                 {
-                    await axios.post('http://127.0.0.1:8000/read-image', {image:this.image, withPrice:this.withPrice, condition:this.condition}, {headers: {'Content-Type': 'application/json'}});
+                    await axios.post('http://127.0.0.1:8000/read-image', {image: this.image}, {headers: {'Content-Type': 'application/json'}});
                     this.imageData = await axios.get('http://127.0.0.1:8000/data-image')
                     this.img = this.imageData.data.url 
                 } 
@@ -130,7 +116,7 @@
                 }
 
                 input[type="file"] {
-                    margin-bottom: 10px;
+                    margin-bottom: 20px;
                 }
 
                 button {
@@ -146,27 +132,6 @@
                 button:hover {
                     background-color: #3e8e41;
                 }
-
-                #price{
-                    display: flex;
-                    padding: 10px;
-                    gap: 10px;
-
-                    select{
-                        width: 200px;
-                        padding: 5px;
-                        background-color: #2f3131;
-                        border: 1px solid black;
-                        cursor: pointer;
-                    }
-
-                    input[type="checkbox"]{
-                        margin-top: 5px;
-                        width: 15px;
-                        height: 15px;
-                    }
-                }
-
             }
 
             #preview {
@@ -209,14 +174,6 @@
             #upload{
                 h1{
                     font-size: 24px;
-                }
-
-                #price{
-                    gap: 10px;
-
-                    select{
-                        width: 100%;
-                    }
                 }
             }
 

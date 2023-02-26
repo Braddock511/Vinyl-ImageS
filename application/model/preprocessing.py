@@ -1,6 +1,6 @@
 import re
-from model.discogs_api import get_vinyl
-from model.discogs_scraper import Scraper
+from requests.exceptions import HTTPError
+from discogs_api import get_vinyl
 
 def search_data(data: str, discogs_token: str) -> list[dict]: 
     output_data = []
@@ -16,8 +16,14 @@ def search_data(data: str, discogs_token: str) -> list[dict]:
                 if not re.match(remove_punctuation, code):
                     code = code.replace('"', "").replace("'", "").replace("A", "").replace("B", "").replace(" ", "").replace("-", "").replace("~", "")
                     
-                    # Search the Discogs API for vinyl records matching the code
-                    discogs_data = get_vinyl(code, discogs_token)
+                    try:
+                        discogs_data = get_vinyl(code, discogs_token)
+                    except HTTPError as http_err:
+                        print(f'Preprocessing -> HTTP error occurred: {http_err}')
+                        continue
+                    except Exception as err:
+                        print(f'Preprocessing -> Other error occurred: {err}')
+                        continue
 
                     for disc_data in discogs_data['results']:
                         discogs_code = disc_data['catno'].replace('"', "").replace("'", "").replace("A", "").replace("B", "").replace(" ", "").replace("-", "").replace("~", "")
@@ -27,12 +33,9 @@ def search_data(data: str, discogs_token: str) -> list[dict]:
     
     return output_data
 
-def preprocess_data(data: str, credentials: list, url: str, with_price: bool = False, condition: str = "-M") -> dict:
+def preprocess_data(data: str, credentials: list, url: str) -> dict:
     # Get the Discogs API token from the credentials list
     discogs_token = credentials[7]
-    
-    if with_price:
-        scraper = Scraper('https://www.discogs.com/' , 'onetrust-accept-btn-handler')
 
     # Search the Discogs API for vinyl records matching the input codes
     results = search_data(data, discogs_token)
@@ -43,8 +46,7 @@ def preprocess_data(data: str, credentials: list, url: str, with_price: bool = F
     uri = '-'
     genre = '-'
     title = '-'
-    price = 0
-    
+
     output = {"url": url, "data": []}
 
     for result in results:
@@ -54,25 +56,20 @@ def preprocess_data(data: str, credentials: list, url: str, with_price: bool = F
 
         try: 
             country = result['country']
-        except:
+        except KeyError:
             pass
         try:
             year = result['year']
-        except:
+        except KeyError:
             pass
         try:
             label = result['label'][0] + " " + result['catno']
-        except:
+        except KeyError:
             pass
-        
+
         title = title.replace("*", "").replace("•", "").replace("†", " ").replace("º", " ").replace("—", " ")
 
-        # Get the record price if with_price is True
-        if with_price:
-            scraper.url(f"https://www.discogs.com{uri}")
-            price = scraper.get_price(condition)
-
-        information = {"label": label, "country": country, "year": year, "uri": f"https://www.discogs.com{uri}", "genre": genre, "title": title, "price": price}
+        information = {"label": label, "country": country, "year": year, "uri": f"https://www.discogs.com{uri}", "genre": genre, "title": title}
         output['data'].append(information)
 
     return output

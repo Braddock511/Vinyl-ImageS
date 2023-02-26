@@ -7,7 +7,6 @@
                 <td><h2>Label</h2></td>
                 <td><h2>Country</h2></td>
                 <td><h2>Year</h2></td>
-                <td><h2>Price (PLN)<br>Condition: {{ con }}<br></h2></td>
                 <td><h2>Discogs</h2></td>
             </tr>
 
@@ -17,14 +16,12 @@
                 <td>{{ data.label }}</td>
                 <td>{{ data.country }}</td>
                 <td>{{ data.year }}</td>
-                <td>{{ data.price }}</td>
                 <td><a :href="data.uri" target="_blank">View on Discogs</a></td>
             </tr>
             
             <tr>
                 <td colspan="7">
-                    <h1 v-if="imageData.data.title">Not found more</h1>
-                    <h1 v-if="!imageData.data.title">Not found <br>(Make sure the image is not blur)</h1>
+                    <h2>Not found more <br>(Make sure the image is not blur)</h2>
                 </td>
             </tr>
         </table>        
@@ -51,10 +48,11 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-bottom: 50px;
+            width: 50%;
             
             td {
                 border: 1px solid #ddd;
-                padding: 10px 10px;
+                padding: 15px;
                 font-size: 18px;
             }
 

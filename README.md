@@ -1,17 +1,17 @@
 # Vinyl image processing
 
-The "Vinyl ImageS" application helps users determine the title, genre, label, where it's from, release year, and optionally the value of the vinyl records from the uploaded image. As a user, you can upload a photo of the vinyl record and select the condition of the vinyl from the drop-down menu.
+The "Vinyl ImageS" application helps users determine the title, genre, label, where it's from and release year the vinyl records from the uploaded image. As a user, you can upload a photo of the vinyl record.
 All data is taken from the discogs website: discogs.com
 
 # Configuration
   
-  1. Download and configure all required libraries and tools listed in requirements
-  2. Enable the postgresql service and in database.py -> SQLALCHEMY_DATABASE_URL = "postgresql://{user}:{password}@{host}:{port}/{database}"
-  3. In database.py -> fill in the blanks in data_to_insert
-  4. To enable the interface, in the application folder, type "npm run dev" in the console, the application will run on localhost
+  1. Complete all environment in application/compose.yml (https://docs.imagekit.io/api-reference/api-introduction, https://azure.microsoft.com/pl-pl/products/app-service/api/, https://www.discogs.com/developers)
+  2. In terminal -> cd application, docker-compose up --build
+  3. The application should run on localhost:8080
 
 # Used tools
 
+- Docker 20.10.16
 - Model OCR from Azure API
 - ImageKit API
 - Discogs API 
