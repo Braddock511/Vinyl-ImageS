@@ -1,0 +1,38 @@
+# database
+FROM python:3.10.10-slim-buster
+
+# set working directory
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+# copy requirements file to the container
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# set database variables
+ENV POSTGRES_USER=<your-postgres-user>
+ENV POSTGRES_PASSWORD=<your-postgres-password>
+ENV POSTGRES_HOST=<your-postgres-host>
+ENV POSTGRES_PORT=<your-postgres-port>
+ENV POSTGRES_DB=<your-postgres-database>
+
+# set external api variables
+ENV API_IMAGEKIT_ID=<your-API_IMAGEKIT_ID>
+ENV API_IMAGEKIT_SECRET=<your-API_IMAGEKIT_SECRET>
+ENV API_IMAGEKIT_ENDPOINT=<your-API_IMAGEKIT_ENDPOINT>
+ENV API_AZURE_SUBSCRIPTION_KEY=<your-API_AZURE_SUBSCRIPTION_KEY>
+ENV API_AZURE_ENDPOINT=<your-API_AZURE_ENDPOINT>
+ENV API_DISCOGS_ID=<your-API_DISCOGS_ID>
+ENV API_DISCOGS_SECRET=<your-API_DISCOGS_SECRET>
+ENV API_DISCOGS_TOKEN=<your-API_DISCOGS_TOKEN>
+
+COPY api/ /app
+COPY model/ /app
+
+# Expose port for FastAPI
+EXPOSE 80
+
+# Start FastAPI server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

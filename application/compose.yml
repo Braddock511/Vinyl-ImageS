@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  vueapp:
+    container_name: web
+    build:
+      context: .
+      dockerfile: Dockerfile.vueapp
+    ports:
+      - "8080:80"
+    networks:
+      - frontend_network
+    depends_on:
+      - database
+      - api
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+      - API_IMAGEKIT_ID=<your-API_IMAGEKIT_ID>
+      - API_IMAGEKIT_SECRET=<your-API_IMAGEKIT_SECRET>
+      - API_IMAGEKIT_ENDPOINT=<your-API_IMAGEKIT_ENDPOINT>
+      - API_AZURE_SUBSCRIPTION_KEY=<your-API_AZURE_SUBSCRIPTION_KEY>
+      - API_AZURE_ENDPOINT=<your-API_AZURE_ENDPOINT>
+      - API_DISCOGS_ID=<your-API_DISCOGS_ID>
+      - API_DISCOGS_SECRET=<your-API_DISCOGS_SECRET>
+      - API_DISCOGS_TOKEN=<your-API_DISCOGS_TOKEN>
+    ports:
+      - "8000:80"
+    networks:
+      - frontend_network
+      - backend_network
+    depends_on:
+      - database
+
+  database:
+    container_name: db
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+    networks:
+      - backend_network
+
+networks:
+  frontend_network:
+    driver: bridge
+
+  backend_network:
+    driver: bridge

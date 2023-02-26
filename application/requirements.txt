@@ -1,0 +1,15 @@
+azure-cognitiveservices-vision-computervision==0.9.0
+azure-common==1.1.28
+azure-core==1.26.3
+imagekitio==3.0.1
+msrest==0.7.1
+requests==2.26.0
+selenium==4.8.2
+webdriver_manager==3.7.0
+api==0.0.7
+fastapi==0.92.0
+uvicorn==0.20.0
+SQLAlchemy==2.0.4
+psycopg2-binary==2.9.5
+webdriver-manager==3.7.0
+chromedriver-binary==111.0.5563.19.0
