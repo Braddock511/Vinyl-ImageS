@@ -15,7 +15,6 @@ All data is taken from the discogs website: discogs.com
 - Model OCR from Azure API
 - ImageKit API
 - Discogs API 
-- Selenium scraper
 - FastAPI to own API
 - PostgreSQL database
 - Vue.js to create interface
