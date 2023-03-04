@@ -2,7 +2,7 @@
     <TheHeader />
     <main>
         <div id="info">
-            <p>The "Vinyl ImageS" application helps users determine the title, genre, label, where it's from and release year the vinyl records from the uploaded image. As a user, you can upload a photo of the vinyl record and get information.</p>
+            <p>The "Vinyl ImageS" application helps users determine the title, genre, label, where it's from, release year, and optionally the value of the vinyl records from the uploaded image. As a user, you can upload a photo of the vinyl record and select the condition of the vinyl from the drop-down menu</p>
             <p>All data is taken from the discogs website: <a href="https://discogs.com/" target="_blank">discogs.com</a></p>
             
             <router-link to="/upload" id="upload"><h3>Go to upload</h3></router-link>

@@ -3,13 +3,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from os import environ
 
-try:
-    user = environ.get("POSTGRES_USER")
-    password = environ.get("POSTGRES_PASSWORD")
-    host = environ.get("POSTGRES_HOST")
-    port = environ.get("POSTGRES_PORT")
-    db = environ.get("POSTGRES_DB")
-except:
+user = environ.get("POSTGRES_USER")
+password = environ.get("POSTGRES_PASSWORD")
+host = environ.get("POSTGRES_HOST")
+port = environ.get("POSTGRES_PORT")
+db = environ.get("POSTGRES_DB")
+
+if not user:
     user = "postgres"
     password = "admin"
     host = "localhost"
@@ -79,7 +79,7 @@ def get_credentials():
     
     return credentials
 
-def post_data_image(data: list, image_url: str):
+def post_data_image(data: list, image_url: str, condition: str):
     # create the engine and session to interact with the database
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
     Base = declarative_base()
@@ -92,12 +92,13 @@ def post_data_image(data: list, image_url: str):
         id = Column(Integer, primary_key=True, index=True, autoincrement=True)
         url = Column(String)
         data = Column(String)
+        condition = Column(String)
 
     # create the table if it does not exist
     Base.metadata.create_all(engine)
 
     # create a dictionary of the data to be inserted into the data_image
-    data_to_insert = {"url":image_url, "data": data}
+    data_to_insert = {"url": image_url, "data": data, "condition": condition}
     data_image_instance = Data_Image(**data_to_insert)
 
     # add the instance to the session, commit and close the session to save the data to the database
@@ -119,9 +120,10 @@ def get_data_image():
         id = Column(Integer, primary_key=True, index=True)
         url = Column(String)
         data = Column(String)
+        condition = Column(String)
 
     # retrieve the most recent row from the data_image table
     data_image = session.query(Data_Image).order_by(Data_Image.id.desc()).first()
     session.close()
 
-    return data_image.data, data_image.url
+    return data_image.data, data_image.url, data_image.condition

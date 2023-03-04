@@ -13,6 +13,15 @@
             <form id="upload" @submit.prevent="getDataImage">
                 <h1>Upload Image</h1>
                 <input type="file" @change="handleFileInput" required>
+                <div id="price">
+                    <select v-model="condition">
+                        <option value="Near Mint (NM or M-)">M- (Almost Perfect)</option>
+                        <option value="Mint (M)">M (New)</option>
+                        <option value="Very Good Plus (VG+)">VG+ (Excellent)</option>
+                        <option value="Very Good (VG)">VG (Very Good)</option>
+                        <option value="Good (G)">G (Good)</option>
+                    </select>
+                </div>
                 <button type="submit">Upload</button>
             </form>
 
@@ -41,6 +50,7 @@
                     image: null,
                     imageName: "",
                     imageData: null,
+                    condition: "Near Mint (NM or M-)",
                     visible: false,
                     img: null,
                     loading: false
@@ -62,7 +72,7 @@
                 this.loading = true;
                 try 
                 {
-                    await axios.post('http://127.0.0.1:8000/read-image', {image: this.image}, {headers: {'Content-Type': 'application/json'}});
+                    await axios.post('http://127.0.0.1:8000/read-image', {image: this.image, condition: this.condition}, {headers: {'Content-Type': 'application/json'}});
                     this.imageData = await axios.get('http://127.0.0.1:8000/data-image')
                     this.img = this.imageData.data.url 
                 } 
@@ -131,6 +141,24 @@
 
                 button:hover {
                     background-color: #3e8e41;
+                }
+
+                #price{
+                    display: flex;
+                    padding: 10px;
+                    gap: 10px;
+                    select{
+                        width: 200px;
+                        padding: 5px;
+                        background-color: #2f3131;
+                        border: 1px solid black;
+                        cursor: pointer;
+                    }
+                    input[type="checkbox"]{
+                        margin-top: 5px;
+                        width: 15px;
+                        height: 15px;
+                    }
                 }
             }
 

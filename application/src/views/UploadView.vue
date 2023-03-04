@@ -4,6 +4,7 @@
 </template>
 
 <script>
+
     import TheUpload from '@/components/TheUpload.vue'
     import TheHeader from '@/components/TheHeader.vue'
 

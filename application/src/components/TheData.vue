@@ -7,6 +7,7 @@
                 <td><h2>Label</h2></td>
                 <td><h2>Country</h2></td>
                 <td><h2>Year</h2></td>
+                <td><h2>Condition: {{ con }}</h2></td>
                 <td><h2>Discogs</h2></td>
             </tr>
 
@@ -16,6 +17,7 @@
                 <td>{{ data.label }}</td>
                 <td>{{ data.country }}</td>
                 <td>{{ data.year }}</td>
+                <td>{{ data.price }}$</td>
                 <td><a :href="data.uri" target="_blank">View on Discogs</a></td>
             </tr>
             
@@ -26,7 +28,6 @@
             </tr>
         </table>        
     </div>
-
 </template>
   
 <script>
@@ -48,7 +49,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-bottom: 50px;
-            width: 50%;
+            width: 65%;
             
             td {
                 border: 1px solid #ddd;
